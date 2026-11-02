@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>
+  // A host may serve this page at a folder path with or without the
+  // trailing slash; without it every relative asset path resolves one folder up.
+  if (!/\/$|\.html$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search + location.hash);
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Two heroes study for the AWS Generative AI Developer Professional exam.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<title>AWS GenAI Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main>
+  <section id="loading"><p class="win center">LOADING...</p></section>
+
+  <section id="gate" class="hidden">
+    <header class="hero">
+      <div class="eyebrow">study quest</div>
+      <h1 class="title">AWS GenAI Quest</h1>
+      <p class="lede">Two heroes, 20 trainings, five monsters and one exam dragon.</p>
+    </header>
+    <div class="win center">
+      <button id="signin" class="btn">&#9654; SIGN IN WITH GOOGLE</button>
+      <p class="note" id="gatenote">This party is invite only.</p>
+    </div>
+  </section>
+
+  <section id="app" class="hidden">
+    <div class="topbar">
+      <span id="who"></span>
+      <button id="signout" class="linkbtn">Sign out</button>
+    </div>
+
+    <header class="hero">
+      <div class="eyebrow">study quest</div>
+      <h1 class="title">AWS GenAI Quest</h1>
+      <p class="lede" id="exam"></p>
+    </header>
+
+    <div class="stage win">
+      <canvas id="scene" width="256" height="144" role="img" aria-label="Battle scene"></canvas>
+    </div>
+
+    <div class="row">
+      <div class="win foe">
+        <div class="name" id="foename"></div>
+        <div class="bar"><span id="foebar"></span></div>
+        <div class="small" id="foehp"></div>
+      </div>
+      <div class="win party" id="party"></div>
+    </div>
+
+    <div class="win msg" id="msg" aria-live="polite"></div>
+
+    <ol class="bestiary" id="bestiary" aria-label="The monsters"></ol>
+
+    <details class="win how">
+      <summary>HOW THE BATTLE WORKS</summary>
+      <div id="how"></div>
+    </details>
+
+    <h2 class="section">SPELLBOOK</h2>
+    <p class="note">Tick a training once you have finished it. A domain's Review, Practice and SimuLearn each hit its monster; the rest keep your pace.</p>
+    <p><button type="button" id="editdates" class="btn" aria-pressed="false">EDIT DUE DATES</button></p>
+    <p class="note hidden" id="datenote">Agree on dates together first: a change saves at once, and both of you see it.</p>
+    <div id="book"></div>
+
+    <h2 class="section">FINAL BATTLE</h2>
+    <div class="win" id="final"></div>
+
+    <footer class="note center">Trainings from the Skill Builder Exam Prep Plan for AIP-C01 and the AI Engineer study plan.</footer>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="syllabus.js"></script>
+<script src="quest.js"></script>
+<script src="battle.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

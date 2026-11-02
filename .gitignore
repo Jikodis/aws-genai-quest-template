@@ -1,0 +1,7 @@
+.DS_Store
+.worktrees/
+supabase/.temp/
+supabase/.branches/
+
+# Local Netlify folder (netlify init)
+.netlify

@@ -1,0 +1,7 @@
+# Netlify serves the whole repo root. Keep internals off the web.
+# The `!` forces the rule even though a real file exists at the path.
+/supabase/*     /blocked.html   404!
+/tests/*        /blocked.html   404!
+/AGENTS.md      /blocked.html   404!
+/README.md      /blocked.html   404!
+/test.html      /blocked.html   404!

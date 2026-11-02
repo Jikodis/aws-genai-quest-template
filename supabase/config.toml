@@ -1,0 +1,37 @@
+# Only what this project changes from Supabase's defaults. `supabase config
+# push` writes just the properties declared here, so anything left out keeps
+# the hosted project's own setting. Preview with `supabase config diff`.
+project_id = "aws-genai-quest"
+
+[auth]
+# Your site's address (for example https://my-quest.netlify.app/).
+site_url = "https://YOUR-SITE.netlify.app/"
+additional_redirect_urls = ["https://YOUR-SITE.netlify.app/"]
+
+[auth.email]
+# Google sign-in only: no email signups. The other three repeat the hosted
+# project's values so a push does not touch them.
+enable_signup = false
+enable_confirmations = true
+max_frequency = "1m0s"
+otp_length = 8
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+# Google is the only way in, through your own Google Cloud OAuth web client;
+# both values come from the environment of whoever
+# runs `supabase config push`, so neither is ever committed.
+[auth.external.google]
+enabled = true
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+
+# Hosted defaults, repeated so a push leaves them alone.
+[db.pooler]
+default_pool_size = 15
+max_client_conn = 200
+
+[storage.vector]
+enabled = false

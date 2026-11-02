@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Two heroes study for the AWS Generative AI Developer Professional exam.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<title>AWS GenAI Quest: stub states</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main>
+  <section id="loading"><p class="win center">LOADING...</p></section>
+
+  <section id="gate" class="hidden">
+    <header class="hero">
+      <div class="eyebrow">study quest</div>
+      <h1 class="title">AWS GenAI Quest</h1>
+      <p class="lede">Two heroes, 20 trainings, five monsters and one exam dragon.</p>
+    </header>
+    <div class="win center">
+      <button id="signin" class="btn">&#9654; SIGN IN WITH GOOGLE</button>
+      <p class="note" id="gatenote">This party is invite only.</p>
+    </div>
+  </section>
+
+  <section id="app" class="hidden">
+    <div class="topbar">
+      <span id="who"></span>
+      <button id="signout" class="linkbtn">Sign out</button>
+    </div>
+
+    <header class="hero">
+      <div class="eyebrow">study quest</div>
+      <h1 class="title">AWS GenAI Quest</h1>
+      <p class="lede" id="exam"></p>
+    </header>
+
+    <div class="stage win">
+      <canvas id="scene" width="256" height="144" role="img" aria-label="Battle scene"></canvas>
+    </div>
+
+    <div class="row">
+      <div class="win foe">
+        <div class="name" id="foename"></div>
+        <div class="bar"><span id="foebar"></span></div>
+        <div class="small" id="foehp"></div>
+      </div>
+      <div class="win party" id="party"></div>
+    </div>
+
+    <div class="win msg" id="msg" aria-live="polite"></div>
+
+    <ol class="bestiary" id="bestiary" aria-label="The monsters"></ol>
+
+    <details class="win how">
+      <summary>HOW THE BATTLE WORKS</summary>
+      <div id="how"></div>
+    </details>
+
+    <h2 class="section">SPELLBOOK</h2>
+    <p class="note">Tick a training once you have finished it. A domain's Review, Practice and SimuLearn each hit its monster; the rest keep your pace.</p>
+    <p><button type="button" id="editdates" class="btn" aria-pressed="false">EDIT DUE DATES</button></p>
+    <p class="note hidden" id="datenote">Agree on dates together first: a change saves at once, and both of you see it.</p>
+    <div id="book"></div>
+
+    <h2 class="section">FINAL BATTLE</h2>
+    <div class="win" id="final"></div>
+
+    <footer class="note center">Trainings from the Skill Builder Exam Prep Plan for AIP-C01 and the AI Engineer study plan.</footer>
+  </section>
+</main>
+
+<script src="syllabus.js"></script>
+<script>
+/* Stub states for the battle without a login. 404'd publicly via _redirects.
+   test.html?state=fresh|mid|behind|dragon|won|solo|outsider */
+window.CONFIG = { TODAY: '2026-11-12' };
+(function () {
+  var state = (new URLSearchParams(location.search).get('state')) || 'mid';
+  var A = { email: 'hero@test', display_name: 'Hero', hero: 'fighter', color: 'gold' };
+  var B = { email: 'pal@test', display_name: 'Pal', hero: 'mage', color: 'silver' };
+  var people = state === 'solo' ? [A] : state === 'outsider' ? [] : [A, B];
+  var ids = window.__ids = [];
+  var ticks = [], exams = [], targets = [];
+  function add(who, n, by) {
+    ids.slice(0, n).forEach(function (id) { ticks.push({ training_id: id, person: who, done_by: by || who, done_at: '2026-11-01T12:00:00Z' }); });
+  }
+  window.__seed = function () {
+    if (state === 'mid') { add(A.email, 8); add(B.email, 6, A.email); }
+    if (state === 'behind') { add(A.email, 6); add(B.email, 2); }
+    if (state === 'solo') add(A.email, 5);
+    if (state === 'dragon' || state === 'won') { add(A.email, 20); add(B.email, 20); window.CONFIG.TODAY = '2026-12-15'; }
+    if (state === 'won') exams.push({ person: B.email, passed_on: '2026-12-16', done_by: B.email });
+  };
+  function later(v) { return new Promise(function (r) { setTimeout(function () { r(v); }, 60); }); }
+  window.Data = {
+    currentEmail: function () { return A.email; },
+    getSession: function () { if (!ids.length) { window.Syllabus.TRAININGS.forEach(function (t) { ids.push(t.id); }); window.__seed(); } return later({ user: { email: A.email } }); },
+    signIn: function () {}, signOut: function () { return later(); }, onAuth: function () {},
+    fetchMembers: function () { return later(people.slice()); },
+    fetchTicks: function () { return later(ticks.slice()); },
+    fetchExams: function () { return later(exams.slice()); },
+    tick: function (s, p) { if (!ticks.some(function (t) { return t.training_id === s && t.person === p; })) ticks.push({ training_id: s, person: p, done_by: A.email }); return later(true); },
+    untick: function (s, p) { ticks = ticks.filter(function (t) { return !(t.training_id === s && t.person === p); }); return later(true); },
+    fetchTargets: function () { return later(targets.slice()); },
+    setDue: function (id, d) { targets = targets.filter(function (r) { return r.id !== id; }); targets.push({ id: id, due_on: d, updated_by: A.email }); return later(true); },
+    logPass: function (p) { exams.push({ person: p, passed_on: window.CONFIG.TODAY, done_by: A.email }); return later(true); },
+    undoPass: function (p) { exams = exams.filter(function (x) { return x.person !== p; }); return later(true); }
+  };
+})();
+</script>
+<script src="quest.js"></script>
+<script src="battle.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
